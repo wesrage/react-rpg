@@ -1,23 +1,17 @@
+import Overworld from './screens/Overworld'
 import { useWindowSize } from './hooks'
-const ASPECT_RATIO_WIDTH = 16
-const ASPECT_RATIO_HEIGHT = 9
+
+const root = document.documentElement
+const ASPECT_RATIO_WIDTH = Number(getComputedStyle(root).getPropertyValue('--aspect-ratio-width'))
+const ASPECT_RATIO_HEIGHT = Number(getComputedStyle(root).getPropertyValue('--aspect-ratio-height'))
 
 export default function GameFrame() {
   const { height, width } = useWindowSize()
-  let style = {}
-  if (height / ASPECT_RATIO_HEIGHT < width / ASPECT_RATIO_WIDTH) {
-    style = { height, width: (height * ASPECT_RATIO_WIDTH) / ASPECT_RATIO_HEIGHT }
-  } else {
-    style = { width, height: (width * ASPECT_RATIO_HEIGHT) / ASPECT_RATIO_WIDTH }
-  }
+  const unit = Math.min(height / ASPECT_RATIO_HEIGHT, width / ASPECT_RATIO_WIDTH)
+  document.documentElement.style.setProperty('--unit', `${unit}px`)
   return (
-    <div
-      style={{
-        fontSize: style.height / ASPECT_RATIO_HEIGHT,
-        background: 'black',
-        aspectRatio: `${ASPECT_RATIO_WIDTH} / ${ASPECT_RATIO_HEIGHT}`,
-        ...style,
-      }}
-    />
+    <div id="game-frame">
+      <Overworld />
+    </div>
   )
 }

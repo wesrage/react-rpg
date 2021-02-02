@@ -18,3 +18,15 @@ code {
   justify-content: center;
   align-items: center;
 }
+
+:root {
+  --aspect-ratio-height: 9;
+  --aspect-ratio-width: 16;
+}
+
+#game-frame {
+  font-size: var(--unit);
+  background: black;
+  height: calc(var(--aspect-ratio-height) * var(--unit));
+  width: calc(var(--aspect-ratio-width) * var(--unit));
+}
