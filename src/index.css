@@ -20,8 +20,8 @@ code {
 }
 
 :root {
-  --aspect-height: 9;
-  --aspect-width: 15;
+  --aspect-height: 13;
+  --aspect-width: 21;
 }
 
 #game-frame {
