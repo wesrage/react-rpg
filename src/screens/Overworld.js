@@ -9,13 +9,20 @@ const initialPosition = {
   moving: false,
 }
 
+const MOVEMENT_DIRECTION_MAP = {
+  DOWN: { y: -1 },
+  UP: { y: 1 },
+  LEFT: { x: 1 },
+  RIGHT: { x: -1 },
+}
+
 function positionReducer(state, action) {
   switch (action.type) {
     case 'MOVE':
       if (state.moving && !action.continuous) {
         return state
       }
-      const { x, y } = action
+      const { x, y } = MOVEMENT_DIRECTION_MAP[action.direction]
       return produce(state, draft => {
         draft.x += x || 0
         draft.y += y || 0
@@ -32,20 +39,13 @@ function positionReducer(state, action) {
   }
 }
 
-const MOVEMENT_DIRECTION_MAP = {
-  DOWN: { y: -1 },
-  UP: { y: 1 },
-  LEFT: { x: 1 },
-  RIGHT: { x: -1 },
-}
-
 export default function Overworld() {
   const [position, positionDispatch] = React.useReducer(positionReducer, initialPosition)
   const controls = React.useContext(ControlsContext)
 
   React.useEffect(() => {
     if (controls.direction) {
-      positionDispatch({ type: 'MOVE', ...MOVEMENT_DIRECTION_MAP[controls.direction] })
+      positionDispatch({ type: 'MOVE', direction: controls.direction })
     }
   }, [controls.direction])
 
@@ -54,7 +54,7 @@ export default function Overworld() {
       positionDispatch({
         type: 'MOVE',
         continuous: true,
-        ...MOVEMENT_DIRECTION_MAP[controls.direction],
+        direction: controls.direction,
       })
     } else {
       positionDispatch({ type: 'STOP_MOVING' })
