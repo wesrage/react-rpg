@@ -3,8 +3,8 @@ import Overworld from './screens/Overworld'
 import { useWindowSize, useControls } from './hooks'
 
 const root = document.documentElement
-const ASPECT_RATIO_WIDTH = Number(getComputedStyle(root).getPropertyValue('--aspect-ratio-width'))
-const ASPECT_RATIO_HEIGHT = Number(getComputedStyle(root).getPropertyValue('--aspect-ratio-height'))
+const ASPECT_RATIO_WIDTH = Number(getComputedStyle(root).getPropertyValue('--aspect-width'))
+const ASPECT_RATIO_HEIGHT = Number(getComputedStyle(root).getPropertyValue('--aspect-height'))
 export const ControlsContext = React.createContext({ stack: [] })
 
 export default function GameFrame() {

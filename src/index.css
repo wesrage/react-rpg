@@ -20,15 +20,15 @@ code {
 }
 
 :root {
-  --aspect-ratio-height: 9;
-  --aspect-ratio-width: 16;
+  --aspect-height: 9;
+  --aspect-width: 15;
 }
 
 #game-frame {
   font-size: var(--unit);
   background: black;
-  height: calc(var(--aspect-ratio-height) * var(--unit));
-  width: calc(var(--aspect-ratio-width) * var(--unit));
+  height: calc(var(--aspect-height) * var(--unit));
+  width: calc(var(--aspect-width) * var(--unit));
   position: relative;
   overflow: hidden;
 }

@@ -44,13 +44,13 @@ export default function Overworld() {
   const controls = React.useContext(ControlsContext)
 
   React.useEffect(() => {
-    if (controls.direction in MOVEMENT_DIRECTION_MAP) {
+    if (controls.direction) {
       positionDispatch({ type: 'MOVE', ...MOVEMENT_DIRECTION_MAP[controls.direction] })
     }
-  }, [controls.direction, positionDispatch])
+  }, [controls.direction])
 
   const handleTransitionEnd = React.useCallback(() => {
-    if (controls.direction in MOVEMENT_DIRECTION_MAP) {
+    if (controls.direction) {
       positionDispatch({
         type: 'MOVE',
         continuous: true,
@@ -61,18 +61,40 @@ export default function Overworld() {
     }
   }, [controls.direction])
 
+  const faceAngle =
+    position.face.x < 0 ? 90 : position.face.y < 0 ? 180 : position.face.x > 0 ? 270 : 0
+
   return (
-    <div
-      onTransitionEnd={handleTransitionEnd}
-      style={{
-        height: 'calc(64 * var(--unit))',
-        width: 'calc(64 * var(--unit))',
-        background: 'blue',
-        position: 'absolute',
-        left: `calc(${position.x} * var(--unit))`,
-        top: `calc(${position.y} * var(--unit))`,
-        transition: 'top 0.25s linear, left 0.25s linear',
-      }}
-    ></div>
+    <>
+      <div
+        onTransitionEnd={handleTransitionEnd}
+        style={{
+          height: 'calc(64 * var(--unit))',
+          width: 'calc(64 * var(--unit))',
+          backgroundColor: 'orange',
+          backgroundSize: 'var(--unit) var(--unit)',
+          backgroundImage: `
+            linear-gradient(rgba(0, 0, 0, 0.5) 2px, transparent 2px),
+            linear-gradient(90deg, rgba(0, 0, 0, 0.5) 2px, transparent 2px)
+          `,
+          position: 'absolute',
+          left: `calc(${position.x} * var(--unit))`,
+          top: `calc(${position.y} * var(--unit))`,
+          transition: 'top 0.25s linear, left 0.25s linear',
+        }}
+      />
+      <div
+        style={{
+          background: 'magenta',
+          height: 'var(--unit)',
+          width: 'var(--unit)',
+          position: 'absolute',
+          borderTop: '2px solid #000',
+          transform: `rotate(${faceAngle}deg)`,
+          top: 'calc((var(--aspect-height) - 1) / 2 * var(--unit))',
+          left: 'calc((var(--aspect-width) - 1) / 2 * var(--unit))',
+        }}
+      />
+    </>
   )
 }
