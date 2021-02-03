@@ -22,6 +22,7 @@ code {
 :root {
   --aspect-height: 13;
   --aspect-width: 21;
+  --step-duration: 0.33s;
 }
 
 #game-frame {
@@ -31,4 +32,11 @@ code {
   width: calc(var(--aspect-width) * var(--unit));
   position: relative;
   overflow: hidden;
+}
+
+.sprite {
+  position: absolute;
+  image-rendering: pixelated;
+  top: calc((var(--aspect-height) - 1) / 2 * var(--unit));
+  left: calc((var(--aspect-width) - 1) / 2 * var(--unit));
 }

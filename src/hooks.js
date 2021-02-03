@@ -22,6 +22,21 @@ export function useWindowSize() {
   return size
 }
 
+export function useImageSize(image) {
+  const [size, setSize] = React.useState({ width: 0, height: 0 })
+  React.useEffect(() => {
+    const img = new Image()
+    img.onload = function () {
+      setSize({
+        width: img.naturalWidth,
+        height: img.naturalHeight,
+      })
+    }
+    img.src = image
+  }, [image])
+  return size
+}
+
 function keyStateReducer(state, action) {
   switch (action.type) {
     case 'KEY_DOWN':

@@ -1,6 +1,9 @@
 import React from 'react'
 import { produce } from 'immer'
 import { ControlsContext } from '../GameFrame'
+import AnimatedSprite from '../AnimatedSprite'
+import cecilImage from '../sprites/cecil.png'
+import '../cecil.overworld.css'
 
 const initialPosition = {
   x: 0,
@@ -39,6 +42,21 @@ function positionReducer(state, action) {
   }
 }
 
+function getAnimationState(position) {
+  if (position.face.x < 0) {
+    return position.moving ? 'cecil-walk-right' : 'cecil-idle-right'
+  }
+  if (position.face.x > 0) {
+    return position.moving ? 'cecil-walk-left' : 'cecil-idle-left'
+  }
+  if (position.face.y > 0) {
+    return position.moving ? 'cecil-walk-up' : 'cecil-idle-up'
+  }
+  if (position.face.y < 0) {
+    return position.moving ? 'cecil-walk-down' : 'cecil-idle-down'
+  }
+}
+
 export default function Overworld() {
   const [position, positionDispatch] = React.useReducer(positionReducer, initialPosition)
   const controls = React.useContext(ControlsContext)
@@ -61,9 +79,6 @@ export default function Overworld() {
     }
   }, [controls.direction])
 
-  const faceAngle =
-    position.face.x < 0 ? 90 : position.face.y < 0 ? 180 : position.face.x > 0 ? 270 : 0
-
   return (
     <>
       <div
@@ -80,20 +95,18 @@ export default function Overworld() {
           position: 'absolute',
           left: `calc(${position.x} * var(--unit))`,
           top: `calc(${position.y} * var(--unit))`,
-          transition: 'top 0.25s linear, left 0.25s linear',
+          transition: 'top var(--step-duration) linear, left var(--step-duration) linear',
         }}
       />
-      <div
-        style={{
-          background: 'magenta',
-          height: 'var(--unit)',
-          width: 'var(--unit)',
-          position: 'absolute',
-          borderTop: '2px solid #000',
-          transform: `rotate(${faceAngle}deg)`,
-          top: 'calc((var(--aspect-height) - 1) / 2 * var(--unit))',
-          left: 'calc((var(--aspect-width) - 1) / 2 * var(--unit))',
+      <AnimatedSprite
+        spritesheet={{
+          image: cecilImage,
+          gridSize: 16,
         }}
+        cssClass="cecil-sprite"
+        animationState={getAnimationState(position)}
+        height={1}
+        width={1}
       />
     </>
   )

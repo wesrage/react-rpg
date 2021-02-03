@@ -1,0 +1,113 @@
+@keyframes cecil-idle-down {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+@keyframes cecil-walk-down {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: calc(-1 * var(--unit)) 0;
+  }
+}
+
+@keyframes cecil-idle-up {
+  from {
+    background-position: 0 calc(-1 * var(--unit));
+  }
+  to {
+    background-position: 0 calc(-1 * var(--unit));
+  }
+}
+
+@keyframes cecil-walk-up {
+  0% {
+    background-position: 0 calc(-1 * var(--unit));
+  }
+  50% {
+    background-position: calc(-1 * var(--unit)) calc(-1 * var(--unit));
+  }
+}
+
+@keyframes cecil-idle-right {
+  from {
+    background-position: calc(-2 * var(--unit)) 0;
+  }
+  to {
+    background-position: calc(-2 * var(--unit)) 0;
+  }
+}
+
+@keyframes cecil-walk-right {
+  0% {
+    margin-top: 0;
+    background-position: calc(-2 * var(--unit)) 0;
+  }
+  50% {
+    margin-top: calc(var(--unit) / -16);
+    background-position: calc(-3 * var(--unit)) 0;
+  }
+}
+
+@keyframes cecil-idle-left {
+  from {
+    background-position: calc(-3 * var(--unit)) var(--unit);
+  }
+  to {
+    background-position: calc(-3 * var(--unit)) var(--unit);
+  }
+}
+
+@keyframes cecil-walk-left {
+  0% {
+    margin-top: 0;
+    background-position: calc(-3 * var(--unit)) var(--unit);
+  }
+  50% {
+    margin-top: calc(var(--unit) / -16);
+    background-position: calc(-2 * var(--unit)) var(--unit);
+  }
+}
+
+.cecil-sprite {
+  animation-duration: var(--step-duration);
+  animation-timing-function: steps(1);
+  animation-iteration-count: infinite;
+}
+
+.cecil-idle-down {
+  animation-name: cecil-idle-down;
+}
+
+.cecil-walk-down {
+  animation-name: cecil-walk-down;
+}
+
+.cecil-idle-up {
+  animation-name: cecil-idle-up;
+}
+
+.cecil-walk-up {
+  animation-name: cecil-walk-up;
+}
+
+.cecil-idle-right {
+  animation-name: cecil-idle-right;
+}
+
+.cecil-walk-right {
+  animation-name: cecil-walk-right;
+}
+
+.cecil-idle-left {
+  animation-name: cecil-idle-left;
+}
+
+.cecil-walk-left {
+  animation-name: cecil-walk-left;
+}
