@@ -29,4 +29,6 @@ code {
   background: black;
   height: calc(var(--aspect-ratio-height) * var(--unit));
   width: calc(var(--aspect-ratio-width) * var(--unit));
+  position: relative;
+  overflow: hidden;
 }
