@@ -1,5 +1,6 @@
 import React from 'react'
 import { produce } from 'immer'
+import { ControlsContext } from '../GameFrame'
 
 const initialPosition = {
   x: 0,
@@ -31,63 +32,34 @@ function positionReducer(state, action) {
   }
 }
 
-function keyStateReducer(state, action) {
-  switch (action.type) {
-    case 'KEY_DOWN':
-      if (state.includes(action.key)) {
-        return state
-      }
-      return produce(state, draft => {
-        draft.unshift(action.key)
-      })
-    case 'KEY_UP':
-      return state.filter(key => key !== action.key)
-    default:
-      return state
-  }
-}
-
-const MOVEMENT_KEY_MAP = {
-  ArrowDown: { y: -1 },
-  ArrowUp: { y: 1 },
-  ArrowLeft: { x: 1 },
-  ArrowRight: { x: -1 },
+const MOVEMENT_DIRECTION_MAP = {
+  DOWN: { y: -1 },
+  UP: { y: 1 },
+  LEFT: { x: 1 },
+  RIGHT: { x: -1 },
 }
 
 export default function Overworld() {
   const [position, positionDispatch] = React.useReducer(positionReducer, initialPosition)
-  const [keyState, keyDispatch] = React.useReducer(keyStateReducer, [])
+  const controls = React.useContext(ControlsContext)
 
   React.useEffect(() => {
-    function handleKeydown(e) {
-      keyDispatch({ type: 'KEY_DOWN', key: e.key })
+    if (controls.direction in MOVEMENT_DIRECTION_MAP) {
+      positionDispatch({ type: 'MOVE', ...MOVEMENT_DIRECTION_MAP[controls.direction] })
     }
-    function handleKeyup(e) {
-      keyDispatch({ type: 'KEY_UP', key: e.key })
-    }
-    document.addEventListener('keydown', handleKeydown)
-    document.addEventListener('keyup', handleKeyup)
-    return () => {
-      document.removeEventListener('keydown', handleKeydown)
-      document.removeEventListener('keyup', handleKeyup)
-    }
-  }, [keyDispatch])
-
-  React.useEffect(() => {
-    const key = keyState[0]
-    if (key in MOVEMENT_KEY_MAP) {
-      positionDispatch({ type: 'MOVE', ...MOVEMENT_KEY_MAP[key] })
-    }
-  }, [keyState, positionDispatch])
+  }, [controls.direction, positionDispatch])
 
   const handleTransitionEnd = React.useCallback(() => {
-    const key = keyState[0]
-    if (key in MOVEMENT_KEY_MAP) {
-      positionDispatch({ type: 'MOVE', continuous: true, ...MOVEMENT_KEY_MAP[key] })
+    if (controls.direction in MOVEMENT_DIRECTION_MAP) {
+      positionDispatch({
+        type: 'MOVE',
+        continuous: true,
+        ...MOVEMENT_DIRECTION_MAP[controls.direction],
+      })
     } else {
       positionDispatch({ type: 'STOP_MOVING' })
     }
-  }, [keyState])
+  }, [controls.direction])
 
   return (
     <div
