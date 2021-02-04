@@ -34,9 +34,23 @@ code {
   overflow: hidden;
 }
 
+.overworld {
+  position: absolute;
+  transition: top var(--step-duration) linear, left var(--step-duration) linear;
+}
+
 .sprite {
   position: absolute;
   image-rendering: pixelated;
   top: calc((var(--aspect-height) - 1) / 2 * var(--unit));
   left: calc((var(--aspect-width) - 1) / 2 * var(--unit));
+}
+
+.tile-row {
+  display: flex;
+}
+
+.tile {
+  height: var(--unit);
+  width: var(--unit);
 }

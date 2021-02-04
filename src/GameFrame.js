@@ -7,6 +7,26 @@ const ASPECT_RATIO_WIDTH = Number(getComputedStyle(root).getPropertyValue('--asp
 const ASPECT_RATIO_HEIGHT = Number(getComputedStyle(root).getPropertyValue('--aspect-height'))
 export const ControlsContext = React.createContext({ stack: [] })
 
+const roomMap = {
+  tiles: [
+    // prettier-ignore
+    'xxxxxxx',
+    'x     x',
+    'x     xxx',
+    'x       x',
+    'x      xx',
+    'xxxxxxxx',
+  ],
+  key: {
+    ' ': () => ({
+      style: { background: 'orange' },
+    }),
+    x: () => ({
+      style: { background: 'forestgreen' },
+    }),
+  },
+}
+
 export default function GameFrame() {
   const { height, width } = useWindowSize()
   const controls = useControls()
@@ -15,7 +35,7 @@ export default function GameFrame() {
   return (
     <div id="game-frame">
       <ControlsContext.Provider value={controls}>
-        <Overworld />
+        <Overworld map={roomMap} />
       </ControlsContext.Provider>
     </div>
   )

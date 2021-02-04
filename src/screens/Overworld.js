@@ -6,17 +6,17 @@ import cecilImage from '../sprites/cecil.png'
 import '../cecil.overworld.css'
 
 const initialPosition = {
-  x: 0,
-  y: 0,
+  x: 1,
+  y: 1,
   face: { x: 0, y: 1 },
   moving: false,
 }
 
 const MOVEMENT_DIRECTION_MAP = {
-  DOWN: { y: -1 },
-  UP: { y: 1 },
-  LEFT: { x: 1 },
-  RIGHT: { x: -1 },
+  DOWN: { y: 1 },
+  UP: { y: -1 },
+  LEFT: { x: -1 },
+  RIGHT: { x: 1 },
 }
 
 function positionReducer(state, action) {
@@ -27,10 +27,19 @@ function positionReducer(state, action) {
       }
       const { x, y } = MOVEMENT_DIRECTION_MAP[action.direction]
       return produce(state, draft => {
-        draft.x += x || 0
-        draft.y += y || 0
+        draft.moving = false
         draft.face = { x: x || 0, y: y || 0 }
-        draft.moving = true
+        const nextX = state.x + (x || 0)
+        const nextY = state.y + (y || 0)
+        if (nextY >= 0 && nextY < action.tiles.length) {
+          if (nextX >= 0 && nextX < action.tiles[nextY].length) {
+            if (action.tiles[nextY][nextX] === ' ') {
+              draft.x = nextX
+              draft.y = nextY
+              draft.moving = true
+            }
+          }
+        }
       })
     case 'STOP_MOVING': {
       return produce(state, draft => {
@@ -43,29 +52,29 @@ function positionReducer(state, action) {
 }
 
 function getAnimationState(position) {
-  if (position.face.x < 0) {
+  if (position.face.x > 0) {
     return position.moving ? 'cecil-walk-right' : 'cecil-idle-right'
   }
-  if (position.face.x > 0) {
+  if (position.face.x < 0) {
     return position.moving ? 'cecil-walk-left' : 'cecil-idle-left'
   }
-  if (position.face.y > 0) {
+  if (position.face.y < 0) {
     return position.moving ? 'cecil-walk-up' : 'cecil-idle-up'
   }
-  if (position.face.y < 0) {
+  if (position.face.y > 0) {
     return position.moving ? 'cecil-walk-down' : 'cecil-idle-down'
   }
 }
 
-export default function Overworld() {
+export default function Overworld({ map }) {
   const [position, positionDispatch] = React.useReducer(positionReducer, initialPosition)
   const controls = React.useContext(ControlsContext)
 
   React.useEffect(() => {
     if (controls.direction) {
-      positionDispatch({ type: 'MOVE', direction: controls.direction })
+      positionDispatch({ type: 'MOVE', direction: controls.direction, tiles: map.tiles })
     }
-  }, [controls.direction])
+  }, [controls.direction, map.tiles])
 
   const handleTransitionEnd = React.useCallback(() => {
     if (controls.direction) {
@@ -73,31 +82,31 @@ export default function Overworld() {
         type: 'MOVE',
         continuous: true,
         direction: controls.direction,
+        tiles: map.tiles,
       })
     } else {
       positionDispatch({ type: 'STOP_MOVING' })
     }
-  }, [controls.direction])
+  }, [controls.direction, map.tiles])
 
   return (
     <>
       <div
         onTransitionEnd={handleTransitionEnd}
+        className="overworld"
         style={{
-          height: 'calc(64 * var(--unit))',
-          width: 'calc(64 * var(--unit))',
-          backgroundColor: 'orange',
-          backgroundSize: 'var(--unit) var(--unit)',
-          backgroundImage: `
-            linear-gradient(rgba(0, 0, 0, 0.5) 2px, transparent 2px),
-            linear-gradient(90deg, rgba(0, 0, 0, 0.5) 2px, transparent 2px)
-          `,
-          position: 'absolute',
-          left: `calc(${position.x} * var(--unit))`,
-          top: `calc(${position.y} * var(--unit))`,
-          transition: 'top var(--step-duration) linear, left var(--step-duration) linear',
+          left: `calc((((var(--aspect-width) - 1) / 2) - ${position.x}) * var(--unit))`,
+          top: `calc((((var(--aspect-height) - 1) / 2) - ${position.y}) * var(--unit))`,
         }}
-      />
+      >
+        {map.tiles.map((row, rowIndex) => (
+          <div className="tile-row" key={rowIndex}>
+            {row.split('').map((item, tileIndex) => (
+              <div key={tileIndex} className="tile" {...map.key[item]()} />
+            ))}
+          </div>
+        ))}
+      </div>
       <AnimatedSprite
         spritesheet={{
           image: cecilImage,
