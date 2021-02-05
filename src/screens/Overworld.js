@@ -2,7 +2,6 @@ import React from 'react'
 import { produce } from 'immer'
 import { ControlsContext } from '../GameFrame'
 import AnimatedSprite from '../AnimatedSprite'
-import cecilImage from '../sprites/cecil.png'
 import '../cecil.overworld.css'
 
 const initialPosition = {
@@ -107,16 +106,7 @@ export default function Overworld({ map }) {
           </div>
         ))}
       </div>
-      <AnimatedSprite
-        spritesheet={{
-          image: cecilImage,
-          gridSize: 16,
-        }}
-        cssClass="cecil-sprite"
-        animationState={getAnimationState(position)}
-        height={1}
-        width={1}
-      />
+      <AnimatedSprite cssClass="cecil-sprite" animationState={getAnimationState(position)} />
     </>
   )
 }
