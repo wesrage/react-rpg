@@ -75,8 +75,8 @@
 }
 
 .cecil-sprite {
-  --sprite-width: 16px;
-  --sprite-height: 16px;
+  --sprite-width: 16;
+  --sprite-height: 16;
   --sprites-across: 6;
   background-image: url(sprites/cecil.png);
   background-size: calc(var(--unit) * var(--sprites-across));
