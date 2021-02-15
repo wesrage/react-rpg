@@ -1,30 +1,18 @@
 import React from 'react'
 import Overworld from './screens/Overworld'
 import { useWindowSize, useControls } from './hooks'
+import roomMap from './rooms/room1'
 
 const root = document.documentElement
 const ASPECT_RATIO_WIDTH = Number(getComputedStyle(root).getPropertyValue('--aspect-width'))
 const ASPECT_RATIO_HEIGHT = Number(getComputedStyle(root).getPropertyValue('--aspect-height'))
 export const ControlsContext = React.createContext({ stack: [] })
 
-const roomMap = {
-  tiles: [
-    // prettier-ignore
-    'xxxxxxx',
-    'x     x',
-    'x     xxx',
-    'x       x',
-    'x      xx',
-    'xxxxxxxx',
-  ],
-  key: {
-    ' ': () => ({
-      style: { background: 'orange' },
-    }),
-    x: () => ({
-      style: { background: 'forestgreen' },
-    }),
-  },
+const initialPosition = {
+  x: 1,
+  y: 1,
+  face: { x: 0, y: 1 },
+  moving: false,
 }
 
 export default function GameFrame() {
@@ -35,7 +23,7 @@ export default function GameFrame() {
   return (
     <div id="game-frame">
       <ControlsContext.Provider value={controls}>
-        <Overworld map={roomMap} />
+        <Overworld />
       </ControlsContext.Provider>
     </div>
   )

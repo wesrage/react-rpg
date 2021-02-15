@@ -2,13 +2,17 @@ import React from 'react'
 import { produce } from 'immer'
 import { ControlsContext } from '../GameFrame'
 import AnimatedSprite from '../AnimatedSprite'
+import Tile from '../Tile'
 import '../cecil.overworld.css'
+import room1Map from '../rooms/room1'
 
 const initialPosition = {
   x: 1,
   y: 1,
   face: { x: 0, y: 1 },
   moving: false,
+  map: room1Map,
+  teleporting: false,
 }
 
 const MOVEMENT_DIRECTION_MAP = {
@@ -24,15 +28,18 @@ function positionReducer(state, action) {
       if (state.moving && !action.continuous) {
         return state
       }
+      if (state.teleporting) {
+        return state
+      }
       const { x, y } = MOVEMENT_DIRECTION_MAP[action.direction]
       return produce(state, draft => {
         draft.moving = false
         draft.face = { x: x || 0, y: y || 0 }
         const nextX = state.x + (x || 0)
         const nextY = state.y + (y || 0)
-        if (nextY >= 0 && nextY < action.tiles.length) {
-          if (nextX >= 0 && nextX < action.tiles[nextY].length) {
-            if (action.tiles[nextY][nextX] === ' ') {
+        if (nextY >= 0 && nextY < state.map.tiles.length) {
+          if (nextX >= 0 && nextX < state.map.tiles[nextY].length) {
+            if (state.map.tiles[nextY][nextX] !== 'x') {
               draft.x = nextX
               draft.y = nextY
               draft.moving = true
@@ -40,11 +47,23 @@ function positionReducer(state, action) {
           }
         }
       })
-    case 'STOP_MOVING': {
+    case 'TELEPORT':
+      return produce(state, draft => {
+        draft.face = action.face || draft.face
+        draft.x = action.x
+        draft.y = action.y
+        draft.map = action.map
+        draft.teleporting = true
+        draft.moving = false
+      })
+    case 'STOP_MOVING':
       return produce(state, draft => {
         draft.moving = false
       })
-    }
+    case 'STOP_TELEPORTING':
+      return produce(state, draft => {
+        draft.teleporting = false
+      })
     default:
       return state
   }
@@ -65,28 +84,35 @@ function getAnimationState(position) {
   }
 }
 
-export default function Overworld({ map }) {
+export default function Overworld() {
   const [position, positionDispatch] = React.useReducer(positionReducer, initialPosition)
   const controls = React.useContext(ControlsContext)
 
   React.useEffect(() => {
     if (controls.direction) {
-      positionDispatch({ type: 'MOVE', direction: controls.direction, tiles: map.tiles })
+      positionDispatch({ type: 'MOVE', direction: controls.direction })
     }
-  }, [controls.direction, map.tiles])
+  }, [controls.direction])
 
   const handleTransitionEnd = React.useCallback(() => {
-    if (controls.direction) {
+    const mapChar = position.map.tiles[position.y][position.x]
+    if (position.moving && position.map.key[mapChar].onStep) {
+      positionDispatch({
+        ...position.map.key[mapChar].onStep(),
+        moving: false,
+      })
+    } else if (position.teleporting) {
+      positionDispatch({ type: 'STOP_TELEPORTING' })
+    } else if (controls.direction) {
       positionDispatch({
         type: 'MOVE',
         continuous: true,
         direction: controls.direction,
-        tiles: map.tiles,
       })
     } else {
       positionDispatch({ type: 'STOP_MOVING' })
     }
-  }, [controls.direction, map.tiles])
+  }, [controls.direction, position.map, position.teleporting, position.moving, position.x, position.y])
 
   return (
     <>
@@ -98,11 +124,11 @@ export default function Overworld({ map }) {
           top: `calc((((var(--aspect-height) - 1) / 2) - ${position.y}) * var(--unit))`,
         }}
       >
-        {map.tiles.map((row, rowIndex) => (
+        {position.map.tiles.map((row, rowIndex) => (
           <div className="tile-row" key={rowIndex}>
-            {row.split('').map((item, tileIndex) => (
-              <div key={tileIndex} className="tile" {...map.key[item]()} />
-            ))}
+            {row.split('').map((item, tileIndex) => {
+              return <Tile key={tileIndex} {...position.map.key[item]} />
+            })}
           </div>
         ))}
       </div>
