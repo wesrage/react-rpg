@@ -18,14 +18,13 @@ const roomMap = {
       style: { background: 'forestgreen' },
     },
     0: {
-      onStep() {
-        return {
-          type: 'TELEPORT',
+      onStep({ teleport }) {
+        teleport({
           map: room2Map,
           x: 1,
           y: 4,
           face: { x: 1 },
-        }
+        })
       },
     },
   },
