@@ -35,8 +35,18 @@ code {
 }
 
 .overworld {
+  opacity: 1;
   position: absolute;
   transition: top var(--step-duration) linear, left var(--step-duration) linear;
+}
+.overworld.teleporting {
+  transition: opacity calc(var(--step-duration) * 2) ease-in-out;
+}
+.overworld.teleporting.teleporting--in {
+  opacity: 0;
+}
+.overworld.teleporting.teleporting--out {
+  opacity: 1;
 }
 
 .sprite {

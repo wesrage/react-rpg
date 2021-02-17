@@ -1,28 +1,31 @@
 import React from 'react'
+import classnames from 'classnames'
 import { controlsStore } from '../store/controls'
-import { locationStore } from '../store/location'
+import { locationStore, MoveState } from '../store/location'
 import AnimatedSprite from '../AnimatedSprite'
 import Tile from '../Tile'
 import '../cecil.overworld.css'
 
 function getAnimationState(location) {
   if (location.face.x > 0) {
-    return location.moving ? 'cecil-walk-right' : 'cecil-idle-right'
+    return location.moveState === MoveState.MOVING ? 'cecil-walk-right' : 'cecil-idle-right'
   }
   if (location.face.x < 0) {
-    return location.moving ? 'cecil-walk-left' : 'cecil-idle-left'
+    return location.moveState === MoveState.MOVING ? 'cecil-walk-left' : 'cecil-idle-left'
   }
   if (location.face.y < 0) {
-    return location.moving ? 'cecil-walk-up' : 'cecil-idle-up'
+    return location.moveState === MoveState.MOVING ? 'cecil-walk-up' : 'cecil-idle-up'
   }
   if (location.face.y > 0) {
-    return location.moving ? 'cecil-walk-down' : 'cecil-idle-down'
+    return location.moveState === MoveState.MOVING ? 'cecil-walk-down' : 'cecil-idle-down'
   }
 }
 
 export default function Overworld() {
   const controls = React.useContext(controlsStore)
-  const { location, move, teleport, endMove, endTeleport } = React.useContext(locationStore)
+  const { location, move, teleport, endMove, teleportOut, endTeleport } = React.useContext(
+    locationStore,
+  )
 
   React.useEffect(() => {
     if (controls.direction) {
@@ -32,22 +35,30 @@ export default function Overworld() {
 
   const handleTransitionEnd = React.useCallback(() => {
     const mapChar = location.map.tiles[location.y][location.x]
-    if (location.moving && location.map.key[mapChar].onStep) {
+    if (location.moveState === MoveState.MOVING && location.map.key[mapChar].onStep) {
       location.map.key[mapChar].onStep({ teleport })
-    } else if (location.teleporting) {
+    } else if (location.moveState === MoveState.TELEPORTING_IN) {
+      teleportOut()
+    } else if (location.moveState === MoveState.TELEPORTING_OUT) {
       endTeleport()
     } else if (controls.direction) {
       move(controls.direction, { continue: true })
     } else {
       endMove()
     }
-  }, [move, endMove, teleport, endTeleport, location, controls.direction])
+  }, [move, endMove, teleport, teleportOut, endTeleport, location, controls.direction])
 
   return (
     <>
       <div
         onTransitionEnd={handleTransitionEnd}
-        className="overworld"
+        className={classnames('overworld', {
+          'teleporting--out': location.moveState === MoveState.TELEPORTING_OUT,
+          'teleporting--in': location.moveState === MoveState.TELEPORTING_IN,
+          teleporting:
+            location.moveState === MoveState.TELEPORTING_OUT ||
+            location.moveState === MoveState.TELEPORTING_IN,
+        })}
         style={{
           left: `calc((((var(--aspect-width) - 1) / 2) - ${location.x}) * var(--unit))`,
           top: `calc((((var(--aspect-height) - 1) / 2) - ${location.y}) * var(--unit))`,
