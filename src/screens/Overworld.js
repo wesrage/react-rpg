@@ -2,6 +2,7 @@ import React from 'react'
 import classnames from 'classnames'
 import { controlsStore } from '../store/controls'
 import { locationStore, MoveState } from '../store/location'
+import { dialogueStore } from '../store/dialogue'
 import AnimatedSprite from '../AnimatedSprite'
 import Tile from '../Tile'
 import '../cecil.overworld.css'
@@ -26,12 +27,22 @@ export default function Overworld() {
   const { location, move, teleport, endMove, teleportOut, endTeleport } = React.useContext(
     locationStore,
   )
+  const { openDialogue, advanceDialogue, current } = React.useContext(dialogueStore)
 
   React.useEffect(() => {
     if (controls.direction) {
       move(controls.direction)
     }
   }, [move, controls.direction])
+
+  React.useEffect(() => {
+    if (controls.confirm) {
+      const actionMapChar = location.map.tiles[location.y + location.face.y][location.x + location.face.x]
+      if (location.map.key[actionMapChar].onAct) {
+        location.map.key[actionMapChar].onAct({ openDialogue })
+      }
+    }
+  }, [controls, location, openDialogue])
 
   const handleTransitionEnd = React.useCallback(() => {
     const mapChar = location.map.tiles[location.y][location.x]
@@ -67,7 +78,7 @@ export default function Overworld() {
         {location.map.tiles.map((row, rowIndex) => (
           <div className="tile-row" key={rowIndex}>
             {row.split('').map((item, tileIndex) => {
-              return <Tile key={tileIndex} {...location.map.key[item]} />
+              return <Tile key={tileIndex} style={location.map.key[item].style} />
             })}
           </div>
         ))}

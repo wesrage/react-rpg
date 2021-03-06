@@ -40,14 +40,32 @@ export function useImageSize(image) {
 function keyStateReducer(state, action) {
   switch (action.type) {
     case 'KEY_DOWN':
-      if (state.includes(action.key)) {
+      if (state.pressed.includes(action.key)) {
         return state
       }
       return produce(state, draft => {
-        draft.unshift(action.key)
+        draft.pressed.unshift(action.key)
+        draft.triggered.unshift(action.key)
       })
     case 'KEY_UP':
-      return state.filter(key => key !== action.key)
+      return produce(state, draft => {
+        draft.pressed = state.pressed.filter(key => key !== action.key)
+        draft.released.unshift(action.key)
+      })
+    case 'KEY_UNTRIGGER':
+      if (!state.triggered.length) {
+        return state
+      }
+      return produce(state, draft => {
+        draft.triggered = []
+      })
+    case 'KEY_UNRELEASE':
+      if (!state.released.length) {
+        return state
+      }
+      return produce(state, draft => {
+        draft.released = []
+      })
     default:
       return state
   }
@@ -61,7 +79,17 @@ const KEYBOARD_DIRECTION_MAPPING = {
 }
 
 export function useControls() {
-  const [keyStack, keyDispatch] = React.useReducer(keyStateReducer, [])
+  const [keyState, keyDispatch] = React.useReducer(keyStateReducer, {
+    pressed: [],
+    triggered: [],
+    released: [],
+  })
+  React.useEffect(() => {
+    keyDispatch({ type: 'KEY_UNTRIGGER' })
+  }, [keyState.triggered])
+  React.useEffect(() => {
+    keyDispatch({ type: 'KEY_UNRELEASE' })
+  }, [keyState.released])
   React.useEffect(() => {
     function handleKeydown(e) {
       keyDispatch({ type: 'KEY_DOWN', key: e.key })
@@ -76,7 +104,7 @@ export function useControls() {
       document.removeEventListener('keyup', handleKeyup)
     }
   }, [])
-  const directionKey = keyStack.find(key => key in KEYBOARD_DIRECTION_MAPPING)
+  const directionKey = keyState.pressed.find(key => key in KEYBOARD_DIRECTION_MAPPING)
   const direction = KEYBOARD_DIRECTION_MAPPING[directionKey] || null
   return { direction }
 }

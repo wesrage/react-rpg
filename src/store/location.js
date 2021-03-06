@@ -42,7 +42,8 @@ function reducer(state, action) {
         const nextY = state.y + (y || 0)
         if (nextY >= 0 && nextY < state.map.tiles.length) {
           if (nextX >= 0 && nextX < state.map.tiles[nextY].length) {
-            if (state.map.tiles[nextY][nextX] !== 'x') {
+            const tileChar = state.map.tiles[nextY][nextX]
+            if (state.map.key[tileChar].walkable) {
               draft.x = nextX
               draft.y = nextY
               draft.moveState = MoveState.MOVING

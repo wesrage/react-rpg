@@ -13,11 +13,13 @@ const roomMap = {
   key: {
     ' ': {
       style: { background: 'orange' },
+      walkable: true,
     },
     x: {
       style: { background: 'forestgreen' },
     },
     0: {
+      walkable: true,
       onStep({ teleport }) {
         teleport({
           map: room2Map,

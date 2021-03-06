@@ -4,7 +4,7 @@ const roomMap = {
   tiles: [
     // prettier-ignore
     '-----xxxxxxx',
-    '-----x     x',
+    '-----x   c x',
     '-----x     x',
     'xxxxxx     x',
     'x0         x',
@@ -14,11 +14,13 @@ const roomMap = {
     '-': {},
     ' ': {
       style: { background: 'orange' },
+      walkable: true,
     },
     x: {
       style: { background: 'forestgreen' },
     },
     0: {
+      walkable: true,
       onStep({ teleport }) {
         teleport({
           map: room1Map,
@@ -26,6 +28,15 @@ const roomMap = {
           y: 3,
           face: { x: -1 },
         })
+      },
+    },
+    c: {
+      onAct({ openDialogue }) {
+        openDialogue([
+          'Hey, Cecil!',
+          'How are you enjoying the exciting world of React development?',
+          'Well... see ya!',
+        ])
       },
     },
   },
