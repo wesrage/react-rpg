@@ -5,6 +5,7 @@ import { ControlsProvider } from './store/controls'
 import { LocationProvider } from './store/location'
 import { CharactersProvider } from './store/characters'
 import { InventoryProvider } from './store/inventory'
+import { DialogueProvider } from './store/dialogue'
 import { useWindowSize } from './hooks'
 
 const root = document.documentElement
@@ -22,7 +23,9 @@ export default function GameFrame() {
           <LocationProvider>
             <CharactersProvider>
               <InventoryProvider>
-                <Overworld />
+                <DialogueProvider>
+                  <Overworld />
+                </DialogueProvider>
               </InventoryProvider>
             </CharactersProvider>
           </LocationProvider>

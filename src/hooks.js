@@ -78,6 +78,10 @@ const KEYBOARD_DIRECTION_MAPPING = {
   ArrowRight: 'RIGHT',
 }
 
+const BUTTON_MAPPING = {
+  ' ': 'CONFIRM',
+}
+
 export function useControls() {
   const [keyState, keyDispatch] = React.useReducer(keyStateReducer, {
     pressed: [],
@@ -106,5 +110,6 @@ export function useControls() {
   }, [])
   const directionKey = keyState.pressed.find(key => key in KEYBOARD_DIRECTION_MAPPING)
   const direction = KEYBOARD_DIRECTION_MAPPING[directionKey] || null
-  return { direction }
+  const confirm = !!keyState.triggered.find(key => BUTTON_MAPPING[key] === 'CONFIRM')
+  return { direction, confirm }
 }

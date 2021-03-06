@@ -30,19 +30,23 @@ export default function Overworld() {
   const { openDialogue, advanceDialogue, current } = React.useContext(dialogueStore)
 
   React.useEffect(() => {
-    if (controls.direction) {
+    if (controls.direction && !current) {
       move(controls.direction)
     }
-  }, [move, controls.direction])
+  }, [move, controls.direction, current])
 
   React.useEffect(() => {
     if (controls.confirm) {
       const actionMapChar = location.map.tiles[location.y + location.face.y][location.x + location.face.x]
-      if (location.map.key[actionMapChar].onAct) {
-        location.map.key[actionMapChar].onAct({ openDialogue })
+      if (current) {
+        advanceDialogue()
+      } else {
+        if (location.map.key[actionMapChar].onAct) {
+          location.map.key[actionMapChar].onAct({ openDialogue, current })
+        }
       }
     }
-  }, [controls, location, openDialogue])
+  }, [controls, location, openDialogue, advanceDialogue, current])
 
   const handleTransitionEnd = React.useCallback(() => {
     const mapChar = location.map.tiles[location.y][location.x]

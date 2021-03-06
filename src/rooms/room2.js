@@ -31,12 +31,14 @@ const roomMap = {
       },
     },
     c: {
-      onAct({ openDialogue }) {
-        openDialogue([
-          'Hey, Cecil!',
-          'How are you enjoying the exciting world of React development?',
-          'Well... see ya!',
-        ])
+      onAct({ openDialogue, current }) {
+        if (!current) {
+          openDialogue([
+            'Hey, Cecil!',
+            'How are you enjoying the exciting world of React development?',
+            'Well... see ya!',
+          ])
+        }
       },
     },
   },
