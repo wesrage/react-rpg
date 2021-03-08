@@ -1,5 +1,6 @@
 import React from 'react'
 import Overworld from './screens/Overworld'
+import DialogueWindow from './screens/DialogueWindow'
 import { GameStateProvider } from './store/game'
 import { ControlsProvider } from './store/controls'
 import { LocationProvider } from './store/location'
@@ -25,6 +26,7 @@ export default function GameFrame() {
               <InventoryProvider>
                 <DialogueProvider>
                   <Overworld />
+                  <DialogueWindow />
                 </DialogueProvider>
               </InventoryProvider>
             </CharactersProvider>

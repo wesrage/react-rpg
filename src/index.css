@@ -11,6 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 #root {
   width: 100vw;
   height: 100vh;
@@ -47,6 +51,14 @@ code {
 }
 .overworld.teleporting.teleporting--out {
   opacity: 1;
+}
+
+.dialogue-window {
+  border: 5px solid #fff;
+  color: #fff;
+  font-size: calc(var(--unit) * 2 / 3);
+  height: calc(var(--unit) * 3);
+  padding: var(--unit);
 }
 
 .sprite {

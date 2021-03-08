@@ -35,9 +35,6 @@ function DialogueProvider({ children }) {
   const advanceDialogue = React.useCallback(() => {
     dispatch({ type: 'ADVANCE' })
   }, [])
-  React.useEffect(() => {
-    console.log(dialogueState.current)
-  }, [dialogueState])
   return (
     <store.Provider value={{ openDialogue, advanceDialogue, current: dialogueState.current }}>
       {children}

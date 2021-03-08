@@ -1,6 +1,7 @@
 import React from 'react'
 import { produce } from 'immer'
 import room1 from '../rooms/room1'
+import room2 from '../rooms/room2'
 
 export const MoveState = {
   IDLE: 0,
@@ -10,10 +11,14 @@ export const MoveState = {
 }
 
 const initialState = {
-  x: 1,
-  y: 1,
-  face: { x: 0, y: 1 },
-  map: room1,
+  // x: 1,
+  // y: 1,
+  // face: { x: 0, y: 1 },
+  // map: room1,
+  x: 8,
+  y: 2,
+  face: {x: 1, y: 0},
+  map: room2,
   moveState: MoveState.IDLE,
 }
 const store = React.createContext(initialState)

@@ -20,18 +20,18 @@
 - Time of day
 
 # What can we do?
-- Step in a direction
-  - lock controls
-  - animate character sprite
-  - transition room
-  - open controls
-- Turn towards a direction
-- Transition to a new room
-  - after finish walking
-  - lock controls
-  - transition out (fade?)
-  - transition in (fade?)
-  - open controls
+✔ Step in a direction
+  ✔ lock controls
+  ✔ animate character sprite
+  ✔ transition room
+  ✔ open controls
+✔ Turn towards a direction
+✔ Transition to a new room
+  ✔ after finish walking
+  ✔ lock controls
+  ✔ transition out (fade?)
+  ✔ transition in (fade?)
+  ✔ open controls
 - Open menu
   - lock controls
   - transition open
@@ -67,5 +67,5 @@
   - transition to game over screen
   - open controls
   - transition (fade?) on confirm
-- Press action button on tile in facing direction
-- Advance/close dialogue
+✔ Press action button on tile in facing direction
+✔ Advance/close dialogue
