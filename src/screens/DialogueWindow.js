@@ -30,10 +30,9 @@ export default function DialogueWindow() {
 
   // Add the next character to the end of the displayed text
   const printNext = React.useCallback(() => {
-    if (!current || !state.typing) {
-      return
+    if (current && state.typing) {
+      setDisplayText(d => current.slice(0, d.length + 1))
     }
-    setDisplayText(d => current.slice(0, d.length + 1))
   }, [current, state.typing])
 
   // Skip ahead to display entire message
