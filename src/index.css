@@ -54,11 +54,18 @@ code {
 }
 
 .dialogue-window {
-  border: 5px solid #fff;
+  border: 5px solid #1d4ed8;
+  background: #374151;
   color: #fff;
   font-size: calc(var(--unit) * 2 / 3);
   height: calc(var(--unit) * 3);
   padding: var(--unit);
+  transition: transform 150ms linear;
+  transform: scaleY(1);
+}
+
+.dialogue-window--closed {
+  transform: scaleY(0);
 }
 
 .sprite {

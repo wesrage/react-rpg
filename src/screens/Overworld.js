@@ -37,7 +37,8 @@ export default function Overworld() {
 
   React.useEffect(() => {
     if (controls.confirm) {
-      const actionMapChar = location.map.tiles[location.y + location.face.y][location.x + location.face.x]
+      const actionMapChar =
+        location.map.tiles[location.y + location.face.y][location.x + location.face.x]
       if (current) {
         advanceDialogue()
       } else {
