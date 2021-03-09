@@ -113,3 +113,52 @@ export function useControls() {
   const confirm = !!keyState.triggered.find(key => BUTTON_MAPPING[key] === 'CONFIRM')
   return { direction, confirm }
 }
+
+export function useTick(fps, onTick, autoStart = false) {
+  const callbackRef = React.useRef(onTick)
+  const frameRef = React.useRef()
+  const then = React.useRef(0)
+  const fpsInterval = React.useRef(1000 / fps)
+  const stopped = React.useRef(!autoStart)
+
+  React.useLayoutEffect(() => {
+    callbackRef.current = onTick
+    cancelAnimationFrame(frameRef.current)
+  }, [onTick, fps])
+
+  React.useLayoutEffect(() => {
+    fpsInterval.current = 1000 / fps
+  }, [fps])
+
+  const loop = React.useCallback((timestamp) => {
+    if (stopped.current) {
+      cancelAnimationFrame(frameRef.current)
+      return
+    }
+    const elapsed = timestamp - then.current
+    if (elapsed > fpsInterval.current) {
+      then.current = timestamp - (elapsed % fpsInterval.current)
+      callbackRef.current()
+    }
+    frameRef.current = requestAnimationFrame(loop)
+  }, [])
+
+  React.useLayoutEffect(() => {
+    frameRef.current = requestAnimationFrame(loop)
+    return () => {
+      cancelAnimationFrame(frameRef.current)
+    }
+  }, [loop])
+
+  const stop = React.useCallback(() => {
+    stopped.current = true
+  }, [])
+
+  const start = React.useCallback(() => {
+    stopped.current = false
+    loop()
+  }, [loop])
+
+  return [start, stop]
+}
+

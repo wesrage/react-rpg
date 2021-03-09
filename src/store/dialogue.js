@@ -58,7 +58,7 @@ function DialogueProvider({ children }) {
         advanceDialogue,
         current: dialogueState.current,
         enableInput: () => dispatch({ type: 'ENABLE_INPUT' }),
-        disableInput: () => dispatch({ type: 'DISABLE_INPUT '}),
+        disableInput: () => dispatch({ type: 'DISABLE_INPUT' }),
       }}
     >
       {children}
