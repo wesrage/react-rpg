@@ -3,6 +3,7 @@ import classnames from 'classnames'
 import { controlsStore } from '../store/controls'
 import { locationStore, MoveState } from '../store/location'
 import { dialogueStore } from '../store/dialogue'
+import { battleStore } from '../store/battle'
 import AnimatedSprite from '../AnimatedSprite'
 import Tile from '../Tile'
 import '../cecil.overworld.css'
@@ -28,6 +29,7 @@ export default function Overworld() {
     locationStore,
   )
   const { openDialogue, advanceDialogue, current } = React.useContext(dialogueStore)
+  const { startBattle } = React.useContext(battleStore)
 
   React.useEffect(() => {
     if (controls.direction && !current) {
@@ -43,11 +45,11 @@ export default function Overworld() {
         advanceDialogue()
       } else {
         if (location.map.key[actionMapChar].onAct) {
-          location.map.key[actionMapChar].onAct({ openDialogue, current })
+          location.map.key[actionMapChar].onAct({ startBattle, openDialogue, current })
         }
       }
     }
-  }, [controls, location, openDialogue, advanceDialogue, current])
+  }, [controls, location, startBattle, openDialogue, advanceDialogue, current])
 
   const handleTransitionEnd = React.useCallback(() => {
     const mapChar = location.map.tiles[location.y][location.x]

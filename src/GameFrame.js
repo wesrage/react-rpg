@@ -1,12 +1,12 @@
 import React from 'react'
-import Overworld from './screens/Overworld'
-import DialogueWindow from './screens/DialogueWindow'
+import GameManager from './GameManager'
 import { GameStateProvider } from './store/game'
 import { ControlsProvider } from './store/controls'
 import { LocationProvider } from './store/location'
 import { CharactersProvider } from './store/characters'
 import { InventoryProvider } from './store/inventory'
 import { DialogueProvider } from './store/dialogue'
+import { BattleProvider } from './store/battle'
 import { useWindowSize } from './hooks'
 
 const root = document.documentElement
@@ -25,8 +25,9 @@ export default function GameFrame() {
             <CharactersProvider>
               <InventoryProvider>
                 <DialogueProvider>
-                  <Overworld />
-                  <DialogueWindow />
+                  <BattleProvider>
+                    <GameManager />
+                  </BattleProvider>
                 </DialogueProvider>
               </InventoryProvider>
             </CharactersProvider>
