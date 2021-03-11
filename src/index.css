@@ -39,6 +39,7 @@ code {
 }
 
 .overworld {
+  display: block;
   opacity: 1;
   position: absolute;
   transition: top var(--step-duration) linear, left var(--step-duration) linear;

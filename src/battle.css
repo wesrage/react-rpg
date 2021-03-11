@@ -1,0 +1,36 @@
+@keyframes entering-battle {
+  0%,
+  20%,
+  60% {
+    transform: perspective(var(--unit)) translateZ(0) translateY(0);
+    filter: blur(0) contrast(100%) brightness(100%);
+  }
+  40% {
+    transform: perspective(var(--unit)) translateZ(calc(var(--unit) / 2))
+      translateY(calc(var(--aspect-width) / var(--aspect-height) * -3 / 2 * var(--unit)));
+    filter: blur(5px) contrast(125%) brightness(125%);
+  }
+  100% {
+    transform: perspective(var(--unit)) translateZ(var(--unit))
+      translateY(calc(var(--aspect-width) / var(--aspect-height) * -3 * var(--unit)));
+    filter: blur(10px) contrast(300%) brightness(200%);
+  }
+}
+
+.entering-battle {
+  transform: perspective(var(--unit));
+  animation-name: entering-battle;
+  animation-duration: calc(var(--step-duration) * 2);
+  animation-timing-function: cubic-bezier(0.39, 0.575, 0.565, 1);
+  animation-iteration-count: 1;
+}
+
+.in-battle {
+  opacity: 0;
+  height: 0;
+}
+
+.exiting-battle {
+  transition: opacity calc(var(--step-duration) * 2) ease-in-out;
+  opacity: 1;
+}

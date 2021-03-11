@@ -17,9 +17,9 @@ export default function DialogueWindow() {
   }
 
   return (
-    <div style={{ height: '100%', width: '100%', background: 'forestgreen' }}>
-      <h1 style={{ margin: 0 }}>Battle!</h1>
-      <h2>Press [CONFIRM] to win</h2>
+    <div style={{ height: '100%', width: '100%', background: '#000', color: '#fff' }}>
+      <h1 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Battle!</h1>
+      <h4 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Press [CONFIRM] to win</h4>
     </div>
   )
 }

@@ -23,7 +23,7 @@ function getAnimationState(location) {
   }
 }
 
-export default function Overworld() {
+export default function Overworld({ controlsEnabled = true }) {
   const controls = React.useContext(controlsStore)
   const { location, move, teleport, endMove, teleportOut, endTeleport } = React.useContext(
     locationStore,
@@ -32,26 +32,32 @@ export default function Overworld() {
   const { startBattle } = React.useContext(battleStore)
 
   React.useEffect(() => {
+    if (!controlsEnabled) {
+      return
+    }
     if (controls.direction && !current) {
       move(controls.direction)
     }
-  }, [move, controls.direction, current])
+  }, [controlsEnabled, move, controls.direction, current])
 
   React.useEffect(() => {
+    if (!controlsEnabled) {
+      return
+    }
     if (controls.confirm) {
       const actionMapChar =
         location.map.tiles[location.y + location.face.y][location.x + location.face.x]
       if (current) {
         advanceDialogue()
       } else {
-        if (location.map.key[actionMapChar].onAct) {
+        if (location.map.key[actionMapChar].onAct && location.moveState === MoveState.IDLE) {
           location.map.key[actionMapChar].onAct({ startBattle, openDialogue, current })
         }
       }
     }
-  }, [controls, location, startBattle, openDialogue, advanceDialogue, current])
+  }, [controlsEnabled, controls, location, startBattle, openDialogue, advanceDialogue, current])
 
-  const handleTransitionEnd = React.useCallback(() => {
+  const handleTransitionEnd = React.useCallback((e) => {
     const mapChar = location.map.tiles[location.y][location.x]
     if (location.moveState === MoveState.MOVING && location.map.key[mapChar].onStep) {
       location.map.key[mapChar].onStep({ teleport })
