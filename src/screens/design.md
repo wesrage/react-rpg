@@ -44,10 +44,11 @@
   - lock controls
   - transition closed
   - open overworld controls
-- Begin battle mode
+✔ Begin battle mode
   - after finish walking (or on event trigger)
-  - lock controls
-  - transition out (FF style)
+  ✔ on event trigger
+  ✔ lock controls
+  ✔ transition out (FF style)
   - transition in (fade?)
   - move characters and enemies into place
   - start battle timer
@@ -60,8 +61,8 @@
   - display exp, money, item drops
   - lock controls
   - transition out (fade?)
-  - transition in to overworld
-  - open overworld controls
+  ✔ transition in to overworld
+  ✔ open overworld controls
 - On battle lose
   - lock controls
   - transition to game over screen

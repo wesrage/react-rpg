@@ -1,4 +1,5 @@
 import React from 'react'
+import AnimatedSprite from '../AnimatedSprite'
 import { controlsStore } from '../store/controls'
 import { battleStore } from '../store/battle'
 
@@ -17,9 +18,16 @@ export default function DialogueWindow() {
   }
 
   return (
-    <div style={{ height: '100%', width: '100%', background: '#000', color: '#fff' }}>
-      <h1 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Battle!</h1>
-      <h4 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Press [CONFIRM] to win</h4>
+    <div className="battle">
+      <div className="battle__zone">
+        <div className="battle__enemies">
+          <div className="battle__enemy"></div>
+        </div>
+        <div className="battle__party">
+          <div className="battle__party-member"></div>
+        </div>
+      </div>
+      <div className="battle__menu"></div>
     </div>
   )
 }
