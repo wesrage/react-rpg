@@ -7,8 +7,9 @@
   }
   40% {
     transform: perspective(var(--unit)) translateZ(calc(var(--unit) / 2))
-      translateY(calc(var(--aspect-width) / var(--aspect-height) * -3 / 2 * var(--unit)));
-    filter: blur(5px) contrast(125%) brightness(125%);
+    translateY(calc(var(--aspect-width) / var(--aspect-height) * -3 / 2 * var(--unit)));
+    filter: blur(5px) contrast(110%) brightness(110%);
+    /* filter: blur(5px) contrast(125%) brightness(125%); */
   }
   100% {
     transform: perspective(var(--unit)) translateZ(var(--unit))
