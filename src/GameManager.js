@@ -33,6 +33,14 @@ export default function GameManager() {
     }
   }, [battleActive, gameState])
 
+  function transition() {
+    if (gameState.battleStarting) {
+      setGameState(GameState.BATTLE_STARTED)
+    } else if (!battleActive) {
+      setGameState(GameState.OVERWORLD)
+    }
+  }
+
   return (
     <>
       <div
@@ -41,8 +49,8 @@ export default function GameManager() {
           'in-battle': gameState.battleStarted,
           'exiting-battle': gameState.battleEnded,
         })}
-        onAnimationEnd={() => setGameState(GameState.BATTLE_STARTED)}
-        onTransitionEnd={() => setGameState(GameState.OVERWORLD)}
+        onAnimationEnd={transition}
+        onTransitionEnd={transition}
       >
         {!gameState.BATTLE_STARTED && (
           <>
