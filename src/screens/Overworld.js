@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import { controlsStore } from '../store/controls'
 import { locationStore, MoveState } from '../store/location'
 import { dialogueStore } from '../store/dialogue'
-import { battleStore } from '../store/battle'
+import { gameStore } from '../store/game'
 import AnimatedSprite from '../AnimatedSprite'
 import Tile from '../Tile'
 import '../cecil.overworld.css'
@@ -29,7 +29,7 @@ export default function Overworld({ controlsEnabled = true }) {
     locationStore,
   )
   const { openDialogue, advanceDialogue, current } = React.useContext(dialogueStore)
-  const { startBattle } = React.useContext(battleStore)
+  const { startBattle } = React.useContext(gameStore)
 
   React.useEffect(() => {
     if (!controlsEnabled) {

@@ -7,9 +7,8 @@
   }
   40% {
     transform: perspective(var(--unit)) translateZ(calc(var(--unit) / 2))
-    translateY(calc(var(--aspect-width) / var(--aspect-height) * -3 / 2 * var(--unit)));
+      translateY(calc(var(--aspect-width) / var(--aspect-height) * -3 / 2 * var(--unit)));
     filter: blur(5px) contrast(110%) brightness(110%);
-    /* filter: blur(5px) contrast(125%) brightness(125%); */
   }
   100% {
     transform: perspective(var(--unit)) translateZ(var(--unit))
@@ -56,29 +55,105 @@
   position: relative;
   background: rebeccapurple;
   width: 75%;
+  opacity: 1;
+  transition: opacity 1s linear;
+}
+
+.battle__enemies--entering {
+  opacity: 0.99;
+}
+
+.battle__enemies--entering .battle__enemy {
+  left: -100%;
 }
 
 .battle__party {
+  position: relative;
   display: flex;
   justify-content: space-around;
   align-items: center;
   background: goldenrod;
   width: 25%;
+  opacity: 1;
+  transition: opacity 1s linear;
+}
+
+.battle__party--entering {
+  opacity: 0.99;
+}
+
+.battle__party--entering .battle__party-member {
+  right: -100%;
 }
 
 .battle__party-member {
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 10px;
   border-left: 5px solid #000;
   height: calc(var(--unit) * 3 / 2);
   width: var(--unit);
   background: #fff;
+  right: calc(50% - var(--unit) / 2);
+  position: absolute;
+  transition: right 1s linear;
+}
+
+@keyframes enemy-action {
+  0%,
+  100% {
+    transform: scaleX(-1) translateX(0);
+  }
+  50% {
+    transform: scaleX(-1) translateX(calc(var(--unit) / -2));
+  }
+}
+
+@keyframes party-action {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(calc(var(--unit) / -2));
+  }
+}
+
+.battle__party-member--acting {
+  animation-name: party-action;
+  animation-duration: calc(var(--step-duration) * 2);
+  animation-timing-function: cubic-bezier(0.39, 0.575, 0.565, 1);
+  animation-iteration-count: 1;
 }
 
 .battle__enemy {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 20px;
   border-left: 5px solid #000;
   height: calc(var(--unit) * 4);
   width: calc(var(--unit) * 5);
   background: forestgreen;
   transform: scaleX(-1);
+  left: calc(50% - var(--unit) * 5 / 2);
+  position: absolute;
+  transition: left 1s linear;
+}
+
+.battle__enemy > * {
+  transform: scaleX(-1);
+}
+
+.battle__enemy--acting {
+  animation-name: enemy-action;
+  animation-duration: calc(var(--step-duration) * 2);
+  animation-timing-function: cubic-bezier(0.39, 0.575, 0.565, 1);
+  animation-iteration-count: 1;
 }
 
 .battle__menu {

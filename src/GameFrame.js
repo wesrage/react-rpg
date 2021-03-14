@@ -6,7 +6,6 @@ import { LocationProvider } from './store/location'
 import { CharactersProvider } from './store/characters'
 import { InventoryProvider } from './store/inventory'
 import { DialogueProvider } from './store/dialogue'
-import { BattleProvider } from './store/battle'
 import { useWindowSize } from './hooks'
 
 const root = document.documentElement
@@ -25,9 +24,7 @@ export default function GameFrame() {
             <CharactersProvider>
               <InventoryProvider>
                 <DialogueProvider>
-                  <BattleProvider>
-                    <GameManager />
-                  </BattleProvider>
+                  <GameManager />
                 </DialogueProvider>
               </InventoryProvider>
             </CharactersProvider>

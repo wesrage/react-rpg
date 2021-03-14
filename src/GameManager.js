@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import Overworld from './screens/Overworld'
 import DialogueWindow from './screens/DialogueWindow'
 import Battle from './screens/Battle'
-import { battleStore } from './store/battle'
+import { gameStore } from './store/game'
 import './battle.css'
 
 class GameState {
@@ -22,21 +22,21 @@ class GameState {
 }
 
 export default function GameManager() {
-  const { active: battleActive } = React.useContext(battleStore)
-  const [gameState, setGameState] = React.useState(GameState.OVERWORLD)
+  const { inBattle } = React.useContext(gameStore)
+  const [gameState, setGameState] = React.useState(GameState.BATTLE_STARTED)
 
   React.useEffect(() => {
-    if (battleActive && gameState.overworld) {
+    if (inBattle && gameState.overworld) {
       setGameState(GameState.BATTLE_STARTING)
-    } else if (!battleActive && gameState.battleStarted) {
+    } else if (!inBattle && gameState.battleStarted) {
       setGameState(GameState.BATTLE_ENDED)
     }
-  }, [battleActive, gameState])
+  }, [inBattle, gameState])
 
   function transition() {
     if (gameState.battleStarting) {
       setGameState(GameState.BATTLE_STARTED)
-    } else if (!battleActive) {
+    } else if (!inBattle) {
       setGameState(GameState.OVERWORLD)
     }
   }
